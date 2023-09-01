@@ -1,5 +1,6 @@
 export function createStore(reducer, applyMiddleware) {
   let state;
+  let listeners = [];
 
   const getState = () => state;
 
@@ -13,7 +14,16 @@ export function createStore(reducer, applyMiddleware) {
     ? applyMiddleware({ getState, dispatch })(dispatch)
     : dispatch;
 
+  const subscribe = (listener) => {
+    listeners.push(listener);
+    return () => {
+      const index = listeners.indexOf(listener);
+      listeners.splice(index, 1);
+    };
+  };
+
   return {
+    subscribe,
     getState,
     dispatch: enhancedDispatch,
   };
