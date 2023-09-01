@@ -8,6 +8,7 @@ export function createStore(reducer, applyMiddleware) {
 
   let dispatch = (action) => {
     state = reducer(state, action);
+    listeners.forEach(listener => listener('hi'))
   };
 
   const enhancedDispatch = applyMiddleware
